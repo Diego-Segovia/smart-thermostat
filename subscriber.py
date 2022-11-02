@@ -19,9 +19,9 @@ subscriber = pubsub_v1.SubscriberClient()
 
 def callback(message):
     data = message.data
-    number = json.loads(data)
-    number = number.split(":")[1].split("}")[0].split('"')[1].split('"')[0]
-    print(f"Gooogle Cloud Number: {number}.")
+    power_command = json.loads(data)
+    power_cmd = power_command.split(":")[1].split("}")[0].split('"')[1].split('"')[0]
+    print(f"Thermostat Power Command: {power_cmd}.")
     message.ack()
 
 future = subscriber.subscribe(subscription_name, callback=callback)
