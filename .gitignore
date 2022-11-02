@@ -1,6 +1,10 @@
 # Google Service Account Private Key
 smart_thermostat_private_key.json
 
+# ES265 Public/Private Keys
+private.ec.key
+public.pem
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
