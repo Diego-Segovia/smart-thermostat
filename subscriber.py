@@ -31,7 +31,7 @@ with subscriber:
     try:
         future.result()
     except:
-        future.cancel()
-        future.result()
+        future.cancel() # Trigger receiver processing shutdown.
+        future.result() # Block until shutdown complete.
     
 

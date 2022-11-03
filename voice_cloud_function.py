@@ -4,12 +4,12 @@ Python version: 3.7
 Dependency: google-cloud-pubsub
 Note: Change project id & topic id for explicit project info without using environment variables.
 '''
-from dotenv import load_dotenv
-import os
+from dotenv import load_dotenv # Not needed for Google Cloud
+import os # Not needed for Google Cloud
 import json
 from google.cloud import pubsub_v1
 
-load_dotenv()
+load_dotenv() # Not needed for Google Cloud
 
 PROJECT_ID = os.getenv("PROJECT_ID")
 TOPIC_ID = os.getenv("TOPIC_ID")
