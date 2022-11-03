@@ -1,3 +1,9 @@
+'''Voice Processing Google Cloud Function
+Cloud Function used to extract power command from DialogFlow voice request.
+Python version: 3.7
+Dependency: google-cloud-pubsub
+Note: Change project id & topic id for explicit project info without using environment variables.
+'''
 from dotenv import load_dotenv
 import os
 import json
@@ -17,15 +23,13 @@ def publish_messages(project_id, topic_id, payload):
     message_json = json.dumps(payload)
     data = message_json.encode('utf-8')
     publisher.publish(topic_path, data)
-    print(f"Published messages to {topic_path}.")
     
 
 def process_voice(request):
-    print('Processing voice...')
     request_json = request.get_json()
     queryResult = request_json['queryResult']
     parameters = queryResult['parameters']
 
-    power_cmd = parameters['powercmd']
+    power_cmd = parameters['powerstatus']
     payload = {"powerStatus": power_cmd}
     publish_messages(PROJECT_ID, TOPIC_ID, json.dumps(payload))
