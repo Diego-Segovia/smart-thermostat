@@ -22,7 +22,7 @@ def callback(message):
     data = message.data
     message.ack()
     
-    # Formatting data bytestring for JSON parsing
+    # Format data bytestring for JSON parsing
     power_cmd_data = data.decode('utf-8').replace(" ", "").replace("\\", "")
     power_cmd_data = re.sub(r'^.', "", power_cmd_data)
     power_cmd_data = re.sub(r".$", "", power_cmd_data)
