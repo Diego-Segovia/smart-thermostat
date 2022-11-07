@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
+from google.cloud import pubsub_v1
 import os
 import json
-from google.cloud import pubsub_v1
+import publisher
+import re
 
 load_dotenv()
 
@@ -16,16 +18,22 @@ subscription_name = f'projects/{PROJECT_ID}/subscriptions/{SUBSCRIPTION_NAME}'
 
 subscriber = pubsub_v1.SubscriberClient()
 
-
 def callback(message):
     data = message.data
-    power_command = json.loads(data)
-    power_cmd = power_command.split(":")[1].split("}")[0].split('"')[1].split('"')[0]
-    print(f"Thermostat Power Command: {power_cmd}.")
     message.ack()
+    
+    # Formatting data bytestring for JSON parsing
+    power_cmd_data = data.decode('utf-8').replace(" ", "").replace("\\", "")
+    power_cmd_data = re.sub(r'^.', "", power_cmd_data)
+    power_cmd_data = re.sub(r".$", "", power_cmd_data)
+
+    power_cmd = json.loads(power_cmd_data)['powerStatus']
+    print(f'PubSub Command: {power_cmd}')
+    publisher.add_power_cmd(power_cmd)
+    publisher.execute_command()
 
 future = subscriber.subscribe(subscription_name, callback=callback)
-print(f'Listening on {subscription_name}')
+print(f'Listening on subscriptions/{SUBSCRIPTION_NAME}')
 
 with subscriber:
     try:
